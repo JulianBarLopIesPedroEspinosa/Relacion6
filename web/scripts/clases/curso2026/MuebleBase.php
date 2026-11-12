@@ -8,7 +8,7 @@ use function VALFILTER\validaReal;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/web/scripts/libreria/val_filter.php';
 abstract class MuebleBase
 {
-    public const MAXIMO_MUEBLES = 10;
+    public const int MAXIMO_MUEBLES = 10;
 
     private static int $_mueblesCreados = 0;
     protected string $_nombre, $_fabricante, $_pais,
@@ -44,12 +44,12 @@ public function __construct(
 ) {
     // Si ya se ha llegado al máximo no se crea el mueble
     if (self::$_mueblesCreados >= self::MAXIMO_MUEBLES) {
-        throw new \Exception("Se ha alcanzado el máximo de " . self::MAXIMO_MUEBLES . " muebles");
+        throw new Exception("Se ha alcanzado el máximo de " . self::MAXIMO_MUEBLES . " muebles");
     }
 
     // El nombre es obligatorio: si no es válido, error
     if (!$this->setNombre($nombre)) {
-        throw new \Exception("El nombre del mueble no es válido");
+        throw new Exception("El nombre del mueble no es válido");
     }
 
     // Resto de propiedades: si falla el set se asigna el valor por defecto
@@ -304,6 +304,32 @@ public function __construct(
 
     //Será redefinido en las clases hijas y devolverá
     //un array con el nombre de las propiedades adicionales a la clase base
-    abstract public function damePropiedadesAdicionales();
+    abstract public function damePropiedadesAdicionales():array;
+
+
+/*
+Método de clase puedeCrear que devuelve true si se pueden crear más instancias de la
+clase y false en caso contrario. Además, devuelve en el parámetro Número el número de
+muebles que aún se pueden crear de la clase.
+*/    
+
+    public static function puedeCrear(int &$num) :bool{
+        $num = self::MAXIMO_MUEBLES - self::$_mueblesCreados;
+        return $num>0;
+    } 
+
+
+ /*
+    Método que al convertir la instancia en cadena nos devuelve 'MUEBLE de clase
+    XXX con nombre XXX, fabricante XXX, fabricado en XXX a partir del año 999,
+    vendido desde 99/99/9999 hasta 99/99/9999, precio 9999'.
+ */   
+    public function __toString(): string
+{
+    return "MUEBLE de clase " . static::class . " con nombre " . $this->getNombre()
+        . ", fabricante " . $this->getFabricante() . ", fabricado en " . $this->getPais()
+        . " a partir del año " . $this->getAnio() . ", vendido desde " . $this->getFechaIniVenta()
+        . " hasta " . $this->getFechaFinVenta() . ", precio " . $this->getPrecio();
+}
 
 }
