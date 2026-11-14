@@ -15,6 +15,7 @@ abstract class MuebleBase
         $_fechaIniVenta, $_fechaFinVenta ;
     protected int $_anio;
     protected float $_precio;
+    private Caracteristicas $_caracteristicas;
 
 
 
@@ -79,6 +80,8 @@ public function __construct(
         $this->_precio = 30;
     }
 
+    $this->_caracteristicas = new Caracteristicas();
+
     // Todo correcto: se cuenta el mueble creado
     self::$_mueblesCreados++;
 }
@@ -100,6 +103,7 @@ public function __construct(
     public function getFechaFinVenta(): string {return $this->_fechaFinVenta;}
     public function getAnio(): int {return $this->_anio;}
     public function getPrecio(): float {return $this->_precio;}
+    public function getCaracteristicas(): Caracteristicas {return $this->_caracteristicas;}
 
     /**
      * Asigna el valor a la propiedad Propiedad si cumple las restricciones
@@ -291,7 +295,7 @@ public function __construct(
 
     public function __unset(string $nombre): void{throw new \Exception("No existe la propiedad " . $nombre);}
 
-*/
+    */
     public function __set(string $nombre, mixed $valor): void{throw new \Exception("No existe la propiedad " . $nombre);}
 
     public function __get(string $nombre): mixed{throw new \Exception("No existe la propiedad " . $nombre);}
@@ -307,16 +311,33 @@ public function __construct(
     abstract public function damePropiedadesAdicionales():array;
 
 
-/*
-Método de clase puedeCrear que devuelve true si se pueden crear más instancias de la
-clase y false en caso contrario. Además, devuelve en el parámetro Número el número de
-muebles que aún se pueden crear de la clase.
-*/    
+    /*
+    Método de clase puedeCrear que devuelve true si se pueden crear más instancias de la
+    clase y false en caso contrario. Además, devuelve en el parámetro Número el número de
+    muebles que aún se pueden crear de la clase.
+    */    
 
-    public static function puedeCrear(int &$num) :bool{
+    public static function puedeCrear(?int &$num = null) :bool{
         $num = self::MAXIMO_MUEBLES - self::$_mueblesCreados;
         return $num>0;
     } 
+
+
+    /*
+    Método anadirCaracteristicas que recibirá pares de argumentos en la forma (string
+    carac, mixed valor) que se corresponden con el nombre de la característica y el valor de
+    la misma y que añadirá la característica a la propiedad privada. (pueden indicarse 2, 4, 6
+    parámetros, si se indica un número impar se desecha el ultimo parámetro). Ejemplo,
+    anadirCaracteristicas(‘saliente’, true, ‘precio’, 300).
+     */
+    public function anadirCaracteristicas(mixed ...$argumentos): void
+    {
+        $total = count($argumentos);
+        for ($i = 0; $i + 1 < $total; $i += 2) {
+            $nombre = strval($argumentos[$i]);
+            $this->_caracteristicas->$nombre = $argumentos[$i + 1];
+        }
+}
 
 
  /*
@@ -329,7 +350,7 @@ muebles que aún se pueden crear de la clase.
     return "MUEBLE de clase " . static::class . " con nombre " . $this->getNombre()
         . ", fabricante " . $this->getFabricante() . ", fabricado en " . $this->getPais()
         . " a partir del año " . $this->getAnio() . ", vendido desde " . $this->getFechaIniVenta()
-        . " hasta " . $this->getFechaFinVenta() . ", precio " . $this->getPrecio();
+        . " hasta " . $this->getFechaFinVenta() . ", precio " . $this->getPrecio() . ". Caracteristicas: " . $this->_caracteristicas;
 }
 
 }

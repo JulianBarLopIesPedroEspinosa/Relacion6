@@ -36,6 +36,6 @@ function cuerpo()
 ?>
     <main id="main">
         <br><br>
-        <a href="">TO DO </a> <br>
+        <a href="/web/aplicacion/principal/index.php">Relacion 6</a> <br>
 <?php
 }
