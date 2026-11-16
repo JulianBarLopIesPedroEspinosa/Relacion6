@@ -1,6 +1,7 @@
 <?php
 include_once(dirname(__FILE__) . "/../../cabecera.php");
 
+// Funciones de la libreria de validacion que usa esta pagina (espacio de nombres VALFILTER)
 use function VALFILTER\validaCadena;
 use function VALFILTER\validaRango;
 
@@ -13,76 +14,10 @@ $barra = [
     ]
 ];
 
-//Datos de ejemplo
-$muebles = [];
-
-$muebles[1] = new MuebleTradicional(
-    "mesa de comedor",
-    "Roble Hermanos",
-    "ESPAÑA",
-    "15/03/2021",
-    "31/12/2030",
-    2021,
-    450.5,
-    60,
-    "S10"
-);
-$muebles[1]->anadirCaracteristicas("madera", "roble", "extensible", true, "plazas", 8);
-
-$muebles[2] = new MuebleReciclado(
-    "silla eco",
-    "FaMu:Verde S.L.",
-    "PORTUGAL",
-    "01/06/2022",
-    "31/12/2035",
-    2022,
-    75,
-    80
-);
-$muebles[2]->anadirCaracteristicas("material", "plastico reciclado", "apilable", true);
-
-$muebles[3] = new MuebleTradicional(
-    "armario ropero",
-    "Muebles del Sur",
-    "ESPAÑA",
-    "10/01/2020",
-    "31/12/2040",
-    2020,
-    899.99,
-    120,
-    "S02"
-);
-$muebles[3]->anadirCaracteristicas("puertas", 4, "espejo", true, "color", "nogal");
-
-$muebles[4] = new MuebleReciclado(
-    "estanteria palet",
-    "Reutiliza",
-    "FRANCIA",
-    "01/02/2023",
-    "31/12/2033",
-    2023,
-    120,
-    100
-);
-$muebles[4]->anadirCaracteristicas("baldas", 5, "tratada", "barniz al agua", "ULTIMA", "si");
-
-$muebles[5] = new MuebleTradicional(
-    "cama nido",
-    "Descanso Antequera",
-    "ESPAÑA",
-    "01/09/2024",
-    "31/12/2034",
-    2024,
-    650,
-    85.5,
-    "S05"
-);
-$muebles[5]->anadirCaracteristicas("medidas", "90x190", "cajones", 2, "somier", true);
-
-
+// El array $muebles se define en datos.php (incluido desde cabecera.php)
 
 // propiedades comunes a todos los muebles (las de MuebleBase)
-$propiedadesBase = ["Nombre", "Fabricante", "Pais", "Anio", "FechaIniVenta", "FechaFinVenta", "Precio"];
+$propiedadesBase = ["Nombre", "Fabricante", "Pais", "Anio", "FechaIniVenta", "FechaFinVenta", "Precio", "MaterialDescripcion"];
 
 $seleccionado = 0;   // indice del mueble elegido en el select
 $mostrar = [];       // propiedades del mueble a mostrar (nombre => valor)
@@ -105,7 +40,7 @@ if (isset($_POST["mostrar"])) {
         $propiedades = array_merge($propiedadesBase, $mueble->damePropiedadesAdicionales());
         foreach ($propiedades as $prop) {
             $metodo = "get" . $prop;
-            $mostrar[$prop] = $mueble->$metodo();
+            $mostrar[$prop] = $mueble->$metodo(); //
         }
     }
 }
@@ -143,6 +78,8 @@ function cuerpo(array $muebles, int $seleccionado, array $mostrar, array $errore
                 <th>Pais</th>
                 <th>Año</th>
                 <th>Precio</th>
+                <th>Material</th>
+
             </tr>
             <?php foreach ($muebles as $indice => $mueble) { ?>
                 <tr>
@@ -153,6 +90,7 @@ function cuerpo(array $muebles, int $seleccionado, array $mostrar, array $errore
                     <td><?= htmlspecialchars($mueble->getPais()) ?></td>
                     <td><?= $mueble->getAnio() ?></td>
                     <td><?= number_format($mueble->getPrecio(), 2, ",", ".") ?> €</td>
+                    <td><?= htmlspecialchars($mueble->getMaterialDescripcion()) ?></td>
                 </tr>
             <?php } ?>
         </table>

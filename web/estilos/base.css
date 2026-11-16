@@ -214,8 +214,8 @@ header,
 
 /* ---------- Contenido principal ---------- */
 #main {
-    margin: 14px 32px 0;
-    padding: 32px 36px;
+    margin: 14px 10px 0;
+    padding: 10px 10px;
     background-color: var(--superficie);
     border: 1px solid var(--borde);
     border-radius: var(--radio);
@@ -559,7 +559,7 @@ input[type="radio"] {
 
 .tabla td,
 #main table td {
-    padding: 10px 14px;
+    padding: 1px 4px;
     border-top: 1px solid var(--borde);
 }
 

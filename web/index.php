@@ -1,41 +1,9 @@
 <?php
-include_once(dirname(__FILE__) . "/cabecera.php");
-//Controlador
-
-$barra = [
-
-    [
-        "TEXTO" => "inicio",
-        "ENLACE" => "index.php"
-    ]
-];
-
-
-//dibuja la plantilla de la vista
-inicioCabecera("Tienda");
-cabecera();
-finCabecera();
-inicioCuerpo("TIENDA", $barra);
-cuerpo();  //llamo a la vista
-finCuerpo();
-// **********************************************************
-
-//vista
-function cabecera()
-{
-
-?>
-    <!-- esto va en el head -->
-<?php
-
-}
-
-//vista
-function cuerpo()
-{
-?>
-    <main id="main">
-        <br><br>
-        <a href="/web/aplicacion/principal/index.php">Relacion 6</a> <br>
-<?php
-}
+/*
+ * Pagina inicial del sitio.
+ * Redirige automaticamente a la pagina principal de la aplicacion.
+ * header() tiene que ir antes de cualquier salida (echo, HTML...) y
+ * exit evita que se siga ejecutando el resto del fichero.
+ */
+header("Location: /aplicacion/principal/index.php");
+exit;
